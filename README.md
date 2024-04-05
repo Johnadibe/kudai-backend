@@ -21,7 +21,7 @@ Kudai Bank is a Node.js application that provides a comprehensive API for bank o
 1. Clone the repository:
    
     ```bash
-    git clone https://github.com/ugwusomto/kudai-backend.git
+    git clone https://github.com/Johnadibe/kudai-backend
     ```
 3. Navigate to the project directory:
    
