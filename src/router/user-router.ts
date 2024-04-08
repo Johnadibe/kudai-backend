@@ -1,7 +1,9 @@
 import express, {Request, Response} from "express";
 import UserController from "../controllers/user-controller";
 import UserService from "../services/user-service";
-import Utility from "../utils/index.utils";
+// import Utility from "../utils/index.utils";
+import { validator } from "../middlewares/index.middleware";
+import ValidationSchema from "../validators/user-validator-schema";
 
 const createUserRoute = () => {
     const router = express.Router();
@@ -9,25 +11,25 @@ const createUserRoute = () => {
     const userController = new UserController(userService)
 
     
-    Utility.printRed("POST : /api/user/register")
+    // Utility.printRed("POST : /api/user/register")
     // Post Route for register
-    router.post("/register", (req : Request, res : Response) => {
+    router.post("/register", validator(ValidationSchema.registerSchema), (req : Request, res : Response) => {
         return userController.register(req, res)
     })
 
-    Utility.printRed("POST : /api/user/login")
+    // Utility.printRed("POST : /api/user/login")
      // Post Route for login
      router.post("/login", (req : Request, res : Response) => {
         return userController.login(req, res)
     })
 
-    Utility.printRed("POST : /api/user/forgot-password")
+    // Utility.printRed("POST : /api/user/forgot-password")
      // Post Route for forgot-password
      router.post("/forgot-password", (req : Request, res : Response) => {
         return userController.forgotPassword(req, res)
     })
 
-    Utility.printRed("POST : /api/user/reset-password")
+    // Utility.printRed("POST : /api/user/reset-password")
     // Post Route for reset-password
     router.post("/reset-password", (req : Request, res : Response) => {
         return userController.resetPassword(req, res)
