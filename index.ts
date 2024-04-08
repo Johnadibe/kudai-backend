@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import DbInitialize from './src/database/init';
+import UserRouter from './src/router/user-router';
 
 //create an app
 const app = express();
@@ -29,7 +30,7 @@ app.use((err: TypeError, req: Request, res: Response, next: NextFunction) => {
   } catch (e) {}
 });
 
-
+app.use("/api/user", UserRouter)
 
 // Basic landing page route
 app.get('/', (req : Request, res : Response) => {
