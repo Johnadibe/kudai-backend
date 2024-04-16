@@ -10,13 +10,17 @@ import {
 import { IUserCreationBody } from "../interfaces/user-interface";
 import Utility from "../utils/index.utils";
 import { ResponseCode } from "../interfaces/enum/code-enum";
+import TokenService from "../services/token-service";
+import { IToken } from "../interfaces/token-interface";
 
 class UserController {
   private userService: UserService;
+  private tokenService: TokenService;
 
-  constructor(_userService: UserService) {
+  constructor(_userService: UserService, _tokenService: TokenService) {
     // It will take one parameter
     this.userService = _userService;
+    this.tokenService = _tokenService
   }
 
   // structure the data
@@ -142,9 +146,20 @@ class UserController {
     try {
         // First thing, Get our params
         const params = {...req.body}
-      res.send({ message: "Forgot Password mail sent" });
+
+        // confirm if does this user with this email exist
+        let user = await this.userService.getUserByField({email: params.email})
+        if (!user) {
+            return Utility.handleError(res, "Account does not exist", ResponseCode.NOT_FOUND)
+        }
+
+        // If the user exist then we will generate a token
+        const token = await this.tokenService.createForgotPasswordToken(params.email) as IToken;
+        // await EmailService.sendForgotPasswordMail(params.email, token.code)
+
+        return Utility.handleSuccess(res, "Password reset code has been sent to your mAIL", {}, ResponseCode.SUCCESS)
     } catch (error) {
-      res.send({ message: "Server Error" });
+      return Utility.handleError(res, (error as TypeError).message, ResponseCode.SERVER_ERROR)
     }
   }
 
